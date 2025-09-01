@@ -5,7 +5,11 @@ export default function NotesFilterLayout({
   children,
   sidebar,
   modal,
-}:  {children : string, sidebar: string, modal: string}) {
+}: {
+  children: React.ReactNode;
+  sidebar: React.ReactNode;
+  modal: React.ReactNode;
+}) {
   return (
     <div className={css.container}>
       <div className={css.sidebar}>{sidebar}</div>
