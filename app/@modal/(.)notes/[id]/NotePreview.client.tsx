@@ -3,7 +3,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchNoteById } from '@/lib/api';
 import css from '@/components/NotePreview/NotePreview.module.css';
-import { useRouter } from 'next/navigation';
 
 export default function NotePreviewClient({ noteId }: { noteId: string }) {
   const {
