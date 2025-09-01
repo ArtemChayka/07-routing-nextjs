@@ -47,7 +47,6 @@ export const fetchNotes = async ({
     search,
   };
 
-  // Додаємо тег тільки якщо він переданий (не для "All")
   if (tag) {
     params.tag = tag;
   }

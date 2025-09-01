@@ -38,7 +38,6 @@ export default function NotesClient({ selectedTag }: NotesClientProps) {
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
-  // Скидаємо сторінку при зміні тегу
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedTag]);

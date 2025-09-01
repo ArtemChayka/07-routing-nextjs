@@ -15,7 +15,6 @@ export default async function FilteredNotes({
   const { slug } = await params;
   const tag = slug?.[0];
 
-  // Перевіряємо чи тег валідний або це "All"
   const validTags: (NoteTag | 'All')[] = [
     'All',
     'Todo',
@@ -28,7 +27,6 @@ export default async function FilteredNotes({
 
   const queryClient = new QueryClient();
 
-  // Якщо тег "All", не передаємо його в запит
   const searchParams =
     selectedTag === 'All' ? {} : { tag: selectedTag as NoteTag };
 
