@@ -4,7 +4,7 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 import { fetchNotes } from '@/lib/api';
-import NotesClient from './Notes.client';
+import FilteredNotesPage from './FilteredNotesPage';
 import { NoteTag } from '@/types/note';
 
 export default async function FilteredNotes({
@@ -38,7 +38,7 @@ export default async function FilteredNotes({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <NotesClient selectedTag={selectedTag as NoteTag | 'All'} />
+      <FilteredNotesPage selectedTag={selectedTag as NoteTag | 'All'} />
     </HydrationBoundary>
   );
 }
