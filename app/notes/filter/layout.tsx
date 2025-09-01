@@ -1,7 +1,15 @@
 import css from './layout.module.css';
 import React from 'react';
 
-export default function NotesFilterLayout({ children, sidebar, modal }) {
+export default function NotesFilterLayout({
+  children,
+  sidebar,
+  modal,
+}: {
+  children: React.ReactNode;
+  sidebar: React.ReactNode;
+  modal: React.ReactNode;
+}) {
   return (
     <div className={css.container}>
       <div className={css.sidebar}>{sidebar}</div>
