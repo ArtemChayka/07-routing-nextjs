@@ -6,7 +6,6 @@ import css from '@/components/NotePreview/NotePreview.module.css';
 import { useRouter } from 'next/navigation';
 
 export default function NotePreviewClient({ noteId }: { noteId: string }) {
-  const router = useRouter();
   const {
     data: note,
     isLoading,
@@ -34,7 +33,7 @@ export default function NotePreviewClient({ noteId }: { noteId: string }) {
       <p className={css.previewContent}>{note.content}</p>
       <div className={css.previewTags}>
         Tags:{' '}
-        {note.tags.map((tag: string) => (
+        {note.tags?.map((tag: string) => (
           <span key={tag} className={css.previewTag}>
             {tag}
           </span>
