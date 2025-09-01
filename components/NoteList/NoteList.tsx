@@ -34,7 +34,7 @@ export default function NoteList({ notes }: NoteListProps) {
           <div className={css.footer}>
             <span className={css.tag}>{note.tag}</span>
             <div className={css.actions}>
-              <Link href={`/notes/${note.id}`} className={css.linkButton}>
+              <Link href={`/notes/${note.id}`} className={css.link}>
                 View details
               </Link>
               <button

@@ -4,9 +4,9 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 import { fetchNoteById } from '@/lib/api';
-import NoteDetailsClient from './NoteDetails.client';
+import NotePreview from '@/components/NotePreview/NotePreview';
 
-export default async function NoteDetails({
+export default async function ModalNoteDetails({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -14,14 +14,18 @@ export default async function NoteDetails({
   const { id } = await params;
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: ['note', id],
-    queryFn: () => fetchNoteById(id),
-  });
+  try {
+    await queryClient.prefetchQuery({
+      queryKey: ['note', id],
+      queryFn: () => fetchNoteById(id),
+    });
+  } catch (error) {
+    console.error('Error prefetching note:', error);
+  }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <NoteDetailsClient noteId={id} />
+      <NotePreview noteId={id} />
     </HydrationBoundary>
   );
 }

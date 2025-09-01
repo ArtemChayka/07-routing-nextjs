@@ -8,6 +8,7 @@ import Modal from '@/components/Modal/Modal';
 import NoteForm from '@/components/NoteForm/NoteForm';
 import Pagination from '@/components/Pagination/Pagination';
 import { fetchNotes } from '@/lib/api';
+import { NoteTag } from '@/types/note';
 import css from './Notes.module.css';
 
 function useDebounce<T>(value: T, delay: number): T {
@@ -26,18 +27,32 @@ function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue;
 }
 
-export default function NotesClient() {
+interface NotesClientProps {
+  selectedTag: NoteTag | 'All';
+}
+
+export default function NotesClient({ selectedTag }: NotesClientProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const debouncedSearchQuery = useDebounce(searchQuery, 500); 
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+
+  // Скидаємо сторінку при зміні тегу
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedTag]);
+
+  const queryParams = {
+    page: currentPage,
+    search: debouncedSearchQuery,
+    ...(selectedTag !== 'All' && { tag: selectedTag }),
+  };
 
   const { data, isLoading, isFetching, error } = useQuery({
-    queryKey: ['notes', { page: currentPage, search: debouncedSearchQuery }],
-    queryFn: () =>
-      fetchNotes({ page: currentPage, search: debouncedSearchQuery }),
-    placeholderData: (previousData) => previousData, 
+    queryKey: ['notes', queryParams],
+    queryFn: () => fetchNotes(queryParams),
+    placeholderData: (previousData) => previousData,
   });
 
   const handlePageChange = (selectedItem: { selected: number }) => {
@@ -61,12 +76,21 @@ export default function NotesClient() {
 
   return (
     <div className={css.container}>
-      <div className={css.toolbar}>
-        <SearchBox onSearchChange={handleSearchChange} value={searchQuery} />
-        <button className={css.addButton} onClick={() => setIsModalOpen(true)}>
-          Create note
-        </button>
+      <div className={css.header}>
+        <h1 className={css.title}>
+          {selectedTag === 'All' ? 'All Notes' : `${selectedTag} Notes`}
+        </h1>
+        <div className={css.toolbar}>
+          <SearchBox onSearchChange={handleSearchChange} value={searchQuery} />
+          <button
+            className={css.addButton}
+            onClick={() => setIsModalOpen(true)}
+          >
+            Create note
+          </button>
+        </div>
       </div>
+
       {isDataFetching && (
         <p className={css.loadingText}>Fetching new notes...</p>
       )}
@@ -83,6 +107,7 @@ export default function NotesClient() {
       ) : (
         <p className={css.noNotes}>No notes found.</p>
       )}
+
       {isModalOpen && (
         <Modal onClose={() => setIsModalOpen(false)}>
           <NoteForm onCancel={() => setIsModalOpen(false)} />

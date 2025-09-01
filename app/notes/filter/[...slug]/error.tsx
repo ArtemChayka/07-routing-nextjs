@@ -16,7 +16,7 @@ export default function Error({
   return (
     <div style={{ padding: '24px' }}>
       <h2>Something went wrong!</h2>
-      <p>Could not fetch notes. {error.message}</p>
+      <p>Could not fetch the list of notes. {error.message}</p>
       <button onClick={() => reset()}>Try again</button>
     </div>
   );

@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { Note } from '../types/note';
+import { Note, NoteTag } from '../types/note';
 
 const BASE_URL = 'https://notehub-public.goit.study/api';
 const TOKEN = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
 if (!TOKEN) {
   console.error(
-    'VITE_NOTEHUB_TOKEN is not defined. Please check your .env file.',
+    'NEXT_PUBLIC_NOTEHUB_TOKEN is not defined. Please check your .env file.',
   );
 }
 
@@ -21,6 +21,7 @@ export interface FetchNotesParams {
   page?: number;
   perPage?: number;
   search?: string;
+  tag?: NoteTag;
 }
 
 export interface FetchNotesResponse {
@@ -38,15 +39,22 @@ export const fetchNotes = async ({
   page = 1,
   perPage = 12,
   search = '',
+  tag,
 }: FetchNotesParams): Promise<FetchNotesResponse> => {
+  const params: Record<string, string | number> = {
+    page,
+    perPage,
+    search,
+  };
+
+  // Додаємо тег тільки якщо він переданий (не для "All")
+  if (tag) {
+    params.tag = tag;
+  }
+
   const { data } = await instance.get<FetchNotesResponse>('/notes', {
-    params: {
-      page,
-      perPage,
-      search,
-    },
+    params,
   });
-  // console.log(data);
 
   return data;
 };
